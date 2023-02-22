@@ -51,6 +51,8 @@ public class Block : IBlock
         {
             PreviousBlockHash = null;
         }
+        
+        BlockHash = CalculateBlockHash(PreviousBlockHash);
     }
 
     public IBlock NextBlock { get; set; }
