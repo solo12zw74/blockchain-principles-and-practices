@@ -6,7 +6,7 @@ public class Block : IBlock
 {
     public Block(int blockNumber, string claimNumber, decimal settlementAmount, DateTimeOffset settlementDate,
         string carRegistration,
-        int mileage, ClaimType claimType, string previousBlockHash)
+        int mileage, ClaimType claimType, IBlock parent)
     {
         ClaimNumber = claimNumber;
         SettlementAmount = settlementAmount;
@@ -15,7 +15,7 @@ public class Block : IBlock
         Mileage = mileage;
         ClaimType = claimType;
         BlockNumber = blockNumber;
-        PreviousBlockHash = previousBlockHash;
+        SetBlockHash(parent);
     }
 
     public string ClaimNumber { get; set; }
