@@ -24,4 +24,9 @@ blockChain.AcceptBlock(block6);
 blockChain.AcceptBlock(block7);
 blockChain.AcceptBlock(block8);
 
+// Check integrity with original data
+blockChain.VerifyChain();
+
+// Check integrity with corrupted data
+block8.Mileage = 5;
 blockChain.VerifyChain();
