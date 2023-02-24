@@ -2,29 +2,14 @@
 
 namespace BlockWithMultipleTransaction
 {
-    public class Transaction : ITransaction
+    public record Transaction(
+        string ClaimNumber,
+        decimal SettlementAmount,
+        DateTimeOffset SettlementDate,
+        string CarRegistration,
+        ClaimType ClaimType) : ITransaction
     {
-        public string ClaimNumber { get; set; }
-        public decimal SettlementAmount { get; set; }
-        public DateTimeOffset SettlementDate { get; set; }
-        public string CarRegistration { get; set; }
         public int Mileage { get; set; }
-        public ClaimType ClaimType { get; set; }
-
-        public Transaction(string claimNumber,
-                            decimal settlementAmount,
-                            DateTime settlementDate,
-                            string carRegistration,
-                            int mileage,
-                            ClaimType claimType)
-        {
-            ClaimNumber = claimNumber;
-            SettlementAmount = settlementAmount;
-            SettlementDate = settlementDate;
-            CarRegistration = carRegistration;
-            Mileage = mileage;
-            ClaimType = claimType;
-        }
 
         public string CalculateTransactionHash()
         {
