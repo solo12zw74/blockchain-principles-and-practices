@@ -3,7 +3,7 @@ namespace BlockWithMultipleTransaction;
 public interface IBlock
 {
     // Block data
-    IEnumerable<ITransaction> Transactions { get; set; }
+    List<ITransaction> Transactions { get; set; }
 
     // Block metadata
     int BlockNumber { get; set; }
