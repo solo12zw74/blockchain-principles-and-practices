@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockWithSingleTransaction", "BlockWithSingleTransaction\BlockWithSingleTransaction\BlockWithSingleTransaction.csproj", "{67388DCE-64F0-4370-90ED-270E4E3A5501}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockWithMultipleTransaction", "BlockWithMultipleTransaction\BlockWithMultipleTransaction\BlockWithMultipleTransaction.csproj", "{6645FAC3-B764-4BF1-B7AF-F63767D5A302}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{67388DCE-64F0-4370-90ED-270E4E3A5501}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67388DCE-64F0-4370-90ED-270E4E3A5501}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67388DCE-64F0-4370-90ED-270E4E3A5501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6645FAC3-B764-4BF1-B7AF-F63767D5A302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6645FAC3-B764-4BF1-B7AF-F63767D5A302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6645FAC3-B764-4BF1-B7AF-F63767D5A302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6645FAC3-B764-4BF1-B7AF-F63767D5A302}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
