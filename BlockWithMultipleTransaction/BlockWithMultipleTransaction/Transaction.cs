@@ -11,6 +11,20 @@ namespace BlockWithMultipleTransaction
     {
         public int Mileage { get; set; }
 
+        public Transaction(string claimNumber,
+            decimal settlementAmount,
+            DateTimeOffset settlementDate,
+            string carRegistration,
+            int mileage,
+            ClaimType claimType) : this(claimNumber,
+            settlementAmount,
+            settlementDate,
+            carRegistration,
+            claimType)
+        {
+            Mileage = mileage;
+        }
+
         public string CalculateTransactionHash()
         {
             string txnHash = ClaimNumber + SettlementAmount + SettlementDate + CarRegistration + Mileage + ClaimType;
