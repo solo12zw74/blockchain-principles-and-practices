@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockWithSingleTransaction"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockWithMultipleTransaction", "BlockWithMultipleTransaction\BlockWithMultipleTransaction\BlockWithMultipleTransaction.csproj", "{6645FAC3-B764-4BF1-B7AF-F63767D5A302}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockWithTransactionPool", "BlockWithTransactionPool\BlockWithTransactionPool\BlockWithTransactionPool.csproj", "{929A93CC-FC72-4BB7-B4E7-FB6A91946E29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{6645FAC3-B764-4BF1-B7AF-F63767D5A302}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6645FAC3-B764-4BF1-B7AF-F63767D5A302}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6645FAC3-B764-4BF1-B7AF-F63767D5A302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{929A93CC-FC72-4BB7-B4E7-FB6A91946E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{929A93CC-FC72-4BB7-B4E7-FB6A91946E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{929A93CC-FC72-4BB7-B4E7-FB6A91946E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{929A93CC-FC72-4BB7-B4E7-FB6A91946E29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
