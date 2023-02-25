@@ -19,10 +19,10 @@ ITransaction txn14 = new Transaction("QAX367", 6000.00m, DateTime.Now, "FJK676",
 ITransaction txn15 = new Transaction("CGO444", 7000.00m, DateTime.Now, "LKU234", 70000, ClaimType.TotalLoss);
 ITransaction txn16 = new Transaction("PLO254", 8000.00m, DateTime.Now, "VBN456", 80000, ClaimType.TotalLoss);
 
-IBlock block1 = new Block(0);
-IBlock block2 = new Block(1);
-IBlock block3 = new Block(2);
-IBlock block4 = new Block(3);
+IBlock block1 = new Block(0, null);
+IBlock block2 = new Block(1, null);
+IBlock block3 = new Block(2, null);
+IBlock block4 = new Block(3, null);
 
 block1.AddTransaction(txn1);
 block1.AddTransaction(txn2);
@@ -61,7 +61,7 @@ chain.VerifyChain();
 
 Console.WriteLine("");
 Console.WriteLine("");
-          
+
 txn5.Mileage = 12345;
 chain.VerifyChain();
 

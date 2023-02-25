@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text;
 using BlockWithTransactionPool.Merkle;
 
@@ -9,13 +10,16 @@ public class Block : IBlock
 
     public List<ITransaction> Transactions { get; set; }
     public int BlockNumber { get; set; }
+    public IKeyStore KeyStore { get; }
     public DateTimeOffset CreatedDate { get; set; }
     public string BlockHash { get; set; }
+    public string BlockSignature { get; set; }
     public string PreviousBlockHash { get; set; }
 
-    public Block(int blockNumber)
+    public Block(int blockNumber, IKeyStore keyStore)
     {
         BlockNumber = blockNumber;
+        KeyStore = keyStore;
         CreatedDate = DateTimeOffset.UtcNow;
         Transactions = new List<ITransaction>();
     }
@@ -42,6 +46,11 @@ public class Block : IBlock
         BuildMerkleTree();
 
         BlockHash = CalculateBlockHash(PreviousBlockHash);
+
+        if (KeyStore != null)
+        {
+            BlockSignature = KeyStore.SignBlock(BlockHash);
+        }
     }
 
     private void BuildMerkleTree()
@@ -61,7 +70,17 @@ public class Block : IBlock
         var blockHeader = BlockNumber + CreatedDate.ToString() + previousBlockHash;
         string combined = _merkleTree.RootNode + blockHeader;
 
-        return Convert.ToBase64String(HashUtil.ComputeHashSha256(Encoding.UTF8.GetBytes(combined)));
+        string completedBlockHash;
+        if (KeyStore == null)
+        {
+            completedBlockHash = Convert.ToBase64String(HashUtil.ComputeHashSha256(Encoding.UTF8.GetBytes(combined)));
+        }
+        else
+        {
+            completedBlockHash = Convert.ToBase64String(Hmac.ComputeHmacSha256(Encoding.UTF8.GetBytes(combined), KeyStore.AuthenticatedHashKey));
+        }
+        
+        return completedBlockHash;
     }
 
     public IBlock NextBlock { get; set; }
