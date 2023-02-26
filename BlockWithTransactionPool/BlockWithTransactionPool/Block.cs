@@ -88,10 +88,15 @@ public class Block : IBlock
     public bool IsValidChain(string prevBlockHash, bool verbose)
     {
         var result = true;
+        bool isValidSignature;
         
         BuildMerkleTree();
 
+        isValidSignature = KeyStore.VerifyBlock(BlockHash, BlockSignature);
+
         string newBlockHash = CalculateBlockHash(prevBlockHash);
+        isValidSignature = KeyStore.VerifyBlock(newBlockHash, BlockSignature);
+
         if (newBlockHash != BlockHash)
         {
             result = false;
@@ -101,7 +106,7 @@ public class Block : IBlock
             result |= PreviousBlockHash == prevBlockHash;
         }
 
-        PrintVerificationMessage(verbose, result);
+        PrintVerificationMessage(verbose, result, isValidSignature);
 
         if (NextBlock != null)
         {
@@ -111,20 +116,20 @@ public class Block : IBlock
         return result;
     }
 
-    private void PrintVerificationMessage(bool verbose, bool isValid)
+    private void PrintVerificationMessage(bool verbose, bool isValid, bool validSignature)
     {
-        if (!verbose)
-        {
-            return;
-        }
-
         if (!isValid)
         {
-            Console.WriteLine($"BlockNumber {BlockNumber} : FAILED VERIFICATION");
+            Console.WriteLine("Block Number " + BlockNumber + " : FAILED VERIFICATION");
         }
         else
         {
-            Console.WriteLine($"BlockNumber {BlockNumber} : PASSED VERIFICATION");
+            Console.WriteLine("Block Number " + BlockNumber + " : PASS VERIFICATION");
+        }
+
+        if (!validSignature)
+        {
+            Console.WriteLine("Block Number " + BlockNumber + " : Invalid Digital Signature");
         }
     }
 }
