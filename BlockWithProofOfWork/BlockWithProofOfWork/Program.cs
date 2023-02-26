@@ -8,10 +8,11 @@ var txnToBeChanged = SetupTransactions(txnPool);
 
 var keyStore = new KeyStore(Hmac.GenerateKey());
 
-IBlock block1 = new Block(0, keyStore);
-IBlock block2 = new Block(1, keyStore);
-IBlock block3 = new Block(2, keyStore);
-IBlock block4 = new Block(3, keyStore);
+var difficulty = 2;
+IBlock block1 = new Block(0, keyStore, difficulty);
+IBlock block2 = new Block(1, keyStore, difficulty);
+IBlock block3 = new Block(2, keyStore, difficulty);
+IBlock block4 = new Block(3, keyStore, difficulty);
 
 FillBlocks(block1, block2, block3, block4);
 

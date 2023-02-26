@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using BlockWithProofOfWork.Merkle;
 
@@ -13,12 +14,16 @@ public class Block : IBlock
     public DateTimeOffset CreatedDate { get; set; }
     public string BlockHash { get; set; }
     public string BlockSignature { get; set; }
+    public int Difficulty { get; }
+    public int Nonce { get; private set; }
+
     public string PreviousBlockHash { get; set; }
 
-    public Block(int blockNumber, IKeyStore keyStore)
+    public Block(int blockNumber, IKeyStore keyStore, int difficulty)
     {
         BlockNumber = blockNumber;
         KeyStore = keyStore;
+        Difficulty = difficulty;
         CreatedDate = DateTimeOffset.UtcNow;
         Transactions = new List<ITransaction>();
     }
@@ -44,13 +49,55 @@ public class Block : IBlock
 
         BuildMerkleTree();
 
-        BlockHash = CalculateBlockHash(PreviousBlockHash);
+        BlockHash = CalculateProofOfWork(CalculateBlockHash(PreviousBlockHash));
 
         if (KeyStore != null)
         {
             BlockSignature = KeyStore.SignBlock(BlockHash);
         }
     }
+
+    public string CalculateProofOfWork(string blockHash)
+    {
+        string difficulty = DifficultyString();
+        Stopwatch stopWatch = new Stopwatch();
+        stopWatch.Start();
+
+        while (true)
+        {
+            var hashedData =
+                Convert.ToBase64String(HashUtil.ComputeHashSha256(Encoding.UTF8.GetBytes(Nonce + blockHash)));
+
+            if (hashedData.StartsWith(difficulty, StringComparison.Ordinal))
+            {
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+
+                // Format and display the TimeSpan value.
+                var elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+
+                Console.WriteLine("Difficulty Level " + Difficulty + " - Nonce = " + Nonce + " - Elapsed = " +
+                                  elapsedTime + " - " + hashedData);
+                return hashedData;
+            }
+
+            Nonce++;
+        }
+    }
+
+    private string DifficultyString()
+    {
+        string difficultyString = string.Empty;
+
+        for (int i = 0; i < Difficulty; i++)
+        {
+            difficultyString += "0";
+        }
+
+        return difficultyString;
+    }
+
 
     private void BuildMerkleTree()
     {
@@ -64,36 +111,20 @@ public class Block : IBlock
         _merkleTree.BuildTree();
     }
 
-    public string CalculateBlockHash(string previousBlockHash)
-    {
-        var blockHeader = BlockNumber + CreatedDate.ToString() + previousBlockHash;
-        string combined = _merkleTree.RootNode + blockHeader;
-
-        string completedBlockHash;
-        if (KeyStore == null)
-        {
-            completedBlockHash = Convert.ToBase64String(HashUtil.ComputeHashSha256(Encoding.UTF8.GetBytes(combined)));
-        }
-        else
-        {
-            completedBlockHash = Convert.ToBase64String(Hmac.ComputeHmacSha256(Encoding.UTF8.GetBytes(combined), KeyStore.AuthenticatedHashKey));
-        }
-        
-        return completedBlockHash;
-    }
-
     public IBlock NextBlock { get; set; }
 
     public bool IsValidChain(string prevBlockHash, bool verbose)
     {
         var result = true;
-        bool isValidSignature;
-        
+
         BuildMerkleTree();
 
-        isValidSignature = KeyStore.VerifyBlock(BlockHash, BlockSignature);
+        bool isValidSignature = KeyStore.VerifyBlock(BlockHash, BlockSignature);
 
-        string newBlockHash = CalculateBlockHash(prevBlockHash);
+        var newBlockHash =
+            Convert.ToBase64String(
+                HashUtil.ComputeHashSha256(Encoding.UTF8.GetBytes(Nonce + CalculateBlockHash(prevBlockHash))));
+
         isValidSignature = KeyStore.VerifyBlock(newBlockHash, BlockSignature);
 
         if (newBlockHash != BlockHash)
@@ -114,6 +145,26 @@ public class Block : IBlock
 
         return result;
     }
+
+    public string CalculateBlockHash(string previousBlockHash)
+    {
+        string blockheader = BlockNumber + CreatedDate.ToString() + previousBlockHash;
+        string combined = _merkleTree.RootNode + blockheader;
+
+        string completeBlockHash;
+
+        if (KeyStore == null)
+        {
+            completeBlockHash = Convert.ToBase64String(HashUtil.ComputeHashSha256(Encoding.UTF8.GetBytes(combined)));
+        }
+        else
+        {
+            completeBlockHash = Convert.ToBase64String(HashUtil.ComputeHashSha256(Encoding.UTF8.GetBytes(combined)));
+        }
+
+        return completeBlockHash;
+    }
+
 
     private void PrintVerificationMessage(bool verbose, bool isValid, bool validSignature)
     {
